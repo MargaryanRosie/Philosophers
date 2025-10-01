@@ -18,6 +18,9 @@ int	init_shared(char *argv[], int argc, t_shared *shared)
 		write(2, "Error\nInvalid argument value\n", 29);
 		return (1);
 	}
+	pthread_mutex_init(&shared->print_mutex, NULL);
+	pthread_mutex_init(&shared->death_mutex, NULL);
+	pthread_mutex_init(&shared->last_meal_mutex, NULL);
 	return (0);
 }
 
@@ -73,9 +76,10 @@ int	init_philosophers(t_shared *shared)
 	{
 		shared->philosophers[i].id = i + 1;
 		shared->philosophers[i].shared = shared;
-		shared->philosophers[i].left_fork = shared->forks[i];
-		shared->philosophers[i].right_fork = shared->forks[(i + 1)
-			% shared->number_of_philosophers];    //fork[0] as right fork
+		shared->philosophers[i].left_fork = &(shared->forks[i]);
+		shared->philosophers[i].right_fork = &(shared->forks[(i + 1)
+			% shared->number_of_philosophers]);    //fork[0] as right fork
 		i++;
 	}
+	return (0);
 }

@@ -40,3 +40,21 @@ int	ft_atoi(char *str)
 	}
 	return ((int)result);
 }
+
+//header defines
+
+// struct timeval {
+//     time_t      tv_sec;   // whole seconds since 1970, time_t is typedef for long
+//     suseconds_t tv_usec;  // microseconds (millionths of a second)
+// };
+
+long long	get_time_in_milliseconds(void)
+{
+	struct timeval	time_value;
+	long long		time_in_milliseconds;
+
+	gettimeofday(&time_value, NULL);    //fills the time values in struct
+	time_in_milliseconds = (long long)(time_value.tv_sec
+		* 1000 + time_value.tv_usec / 1000);
+	return (time_in_milliseconds);
+}
