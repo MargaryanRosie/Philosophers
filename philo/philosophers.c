@@ -48,6 +48,7 @@ int	main(int argc, char *argv[])
 		return (1);
 	}
 	i = 0;
+	shared.someone_died = 0;
 	shared.start_time = get_time_in_milliseconds();         //we set the start time when the simulation starts
 	//after this we need to initialize the last_meal_time of each philosopher with this start time
 	//(*thats why we dont initilize it in the init_philosophers)

@@ -23,7 +23,14 @@ void	*routine(void *arg)
 	t_philosopher	*philo;
 
 	philo = (t_philosopher *)arg;
-	philo->shared->someone_died = 0;
+	//special case for 1 philosopher, cause it will wait forever for the second fork
+	if (philo->shared->number_of_philosophers == 1)
+	{
+		print_state(philo, "has taken a fork\n");
+		precise_usleep(philo->shared->time_to_die);
+		print_state(philo, "died\n");
+		return (NULL);
+	}
 	while (1)
 	{
 		pthread_mutex_lock(&philo->shared->death_mutex);    //when monitor writes, other threads read this data, so needs protection
@@ -47,15 +54,23 @@ void	*routine(void *arg)
 			pthread_mutex_lock(philo->right_fork);
 			print_state(philo, "has taken a fork\n");
 		}
-			pthread_mutex_lock(&philo->shared->last_meal_mutex);
+		pthread_mutex_lock(&philo->shared->last_meal_mutex);
 		philo->last_meal_time = get_time_in_milliseconds();
 		philo->meals_eaten++;
 		pthread_mutex_unlock(&philo->shared->last_meal_mutex);
 		print_state(philo, "is eating\n");
 		//usleep(philo->shared->time_to_eat * 1000);
 		precise_usleep(philo->shared->time_to_eat);
-		pthread_mutex_unlock(philo->right_fork);
-		pthread_mutex_unlock(philo->left_fork);
+		if (philo->id % 2 != 0)
+		{
+    		pthread_mutex_unlock(philo->left_fork);
+    		pthread_mutex_unlock(philo->right_fork);
+		}
+		else
+		{
+    		pthread_mutex_unlock(philo->right_fork);
+    		pthread_mutex_unlock(philo->left_fork);
+		}
 		print_state(philo, "is sleeping\n");
 		// usleep(philo->shared->time_to_sleep * 1000);        //usleep takes microseconds
 		precise_usleep(philo->shared->time_to_sleep);

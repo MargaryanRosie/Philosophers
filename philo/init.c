@@ -79,6 +79,7 @@ int	init_philosophers(t_shared *shared)
 		shared->philosophers[i].left_fork = &(shared->forks[i]);
 		shared->philosophers[i].right_fork = &(shared->forks[(i + 1)
 			% shared->number_of_philosophers]);    //fork[0] as right fork
+		//printf("%p %p\n", shared->philosophers[i].left_fork, shared->philosophers[i].right_fork);
 		i++;
 	}
 	return (0);

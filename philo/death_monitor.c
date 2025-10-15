@@ -21,13 +21,13 @@ void	*death_monitor(void *arg)
 				pthread_mutex_unlock(&shared->last_meal_mutex);
 				if (time_since_last_meal > shared->time_to_die)
 				{
+					pthread_mutex_lock(&shared->death_mutex);
+					shared->someone_died = 1;
+					pthread_mutex_unlock(&shared->death_mutex);
 					pthread_mutex_lock(&shared->print_mutex);
 					printf("%lld %d died\n", get_time_in_milliseconds()
 						- shared->start_time, shared->philosophers[i].id);
 					pthread_mutex_unlock(&shared->print_mutex);
-					pthread_mutex_lock(&shared->death_mutex);
-					shared->someone_died = 1;
-					pthread_mutex_unlock(&shared->death_mutex);
 					return (NULL);
 				}
 				i++;
