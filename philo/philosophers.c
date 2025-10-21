@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philosophers.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: romargar <rosie.margaryan@mail.ru>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/21 15:05:37 by romargar          #+#    #+#             */
+/*   Updated: 2025/10/21 15:29:12 by romargar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philosophers.h"
 
 static int	is_positive_number(char *str)
@@ -9,12 +21,11 @@ static int	is_positive_number(char *str)
 		return (0);
 	while (str[i])
 	{
-		if (str[i] < '0' || str[i] > '9')    //contains non-digit
+		if (str[i] < '0' || str[i] > '9')
 			return (0);
 		i++;
 	}
-	if (i == 1 && str[0] == '0')       //the string contains exactly one character and its 0
-		return (0);
+	if (i == 1 && str[0] == '0')
 	return (1);
 }
 
@@ -61,7 +72,6 @@ int	main(int argc, char *argv[])
 		i++;
 	}
 	i = 0;
-	printf("philonum->%d\n", shared.number_of_philosophers);
 	while (i < shared.number_of_philosophers)
 	{
 		//starting all philosopher threads
