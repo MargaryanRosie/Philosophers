@@ -11,11 +11,13 @@ void	precise_usleep(long duration_in_ms)
 
 static void	print_state(t_philosopher *philo, char *message)
 {
+	pthread_mutex_lock(&philo->shared->death_mutex);
 	pthread_mutex_lock(&philo->shared->print_mutex);
 	if (philo->shared->someone_died != 1)
 		printf("%lld %d %s", get_time_in_milliseconds()
 			- philo->shared->start_time, philo->id, message);
 	pthread_mutex_unlock(&philo->shared->print_mutex);
+	pthread_mutex_unlock(&philo->shared->death_mutex);
 }
 
 void	*routine(void *arg)
@@ -59,7 +61,6 @@ void	*routine(void *arg)
 		philo->meals_eaten++;
 		pthread_mutex_unlock(&philo->shared->last_meal_mutex);
 		print_state(philo, "is eating\n");
-		//usleep(philo->shared->time_to_eat * 1000);
 		precise_usleep(philo->shared->time_to_eat);
 		if (philo->id % 2 != 0)
 		{
@@ -72,7 +73,6 @@ void	*routine(void *arg)
     		pthread_mutex_unlock(philo->left_fork);
 		}
 		print_state(philo, "is sleeping\n");
-		// usleep(philo->shared->time_to_sleep * 1000);        //usleep takes microseconds
 		precise_usleep(philo->shared->time_to_sleep);
 		print_state(philo, "is thinking\n");
 	}

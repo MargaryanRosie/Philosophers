@@ -1,6 +1,6 @@
 NAME = philo
-CC = cc
-CFLAGS = -Wall -Wextra -Werror -fsanitize=thread
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror #-fsanitize=thread -g
 
 SRC = init.c \
       philosophers.c \

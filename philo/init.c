@@ -36,6 +36,7 @@ static int	init_all_forks(t_shared *shared, int num_of_philo)
 	{
 		if (pthread_mutex_init(&shared->forks[i], NULL) != 0)    //NULL means use the default attributes, returns 0 on success
 		{
+			i--;
 			while (i >= 0)
 			{
 				pthread_mutex_destroy(&shared->forks[i]);         //destroy previously allocated mutexes
@@ -79,7 +80,6 @@ int	init_philosophers(t_shared *shared)
 		shared->philosophers[i].left_fork = &(shared->forks[i]);
 		shared->philosophers[i].right_fork = &(shared->forks[(i + 1)
 			% shared->number_of_philosophers]);    //fork[0] as right fork
-		//printf("%p %p\n", shared->philosophers[i].left_fork, shared->philosophers[i].right_fork);
 		i++;
 	}
 	return (0);

@@ -25,21 +25,23 @@ int	main(int argc, char *argv[])
 	int			i;
 	int			j;
 
+
 	if (argc != 5 && argc != 6)
 	{
 		write(2, "Error\nInvalid number of arguments\n", 34);
 		return (1);
 	}
-	i = 0;
-	while (i < argc - 1)
-	{
-		if (!is_positive_number(argv[i + 1]))
+
+		i = 0;
+		while (i < argc - 1)
 		{
-			write(2, "Error\nInvalid input\n", 20);
-			return(1);
+			if (!is_positive_number(argv[i + 1]))
+			{
+				write(2, "Error\nInvalid input\n", 20);
+				return(1);
+			}
+			i++;
 		}
-		i++;
-	}
 	if (init_shared(argv, argc, &shared) || init_mutexes(&shared)
 		|| init_philosophers(&shared))
 	{
@@ -48,21 +50,18 @@ int	main(int argc, char *argv[])
 		return (1);
 	}
 	i = 0;
-	pthread_mutex_lock(&shared.death_mutex);
 	shared.someone_died = 0;
-	pthread_mutex_unlock(&shared.death_mutex);
 	shared.start_time = get_time_in_milliseconds();         //we set the start time when the simulation starts
 	//after this we need to initialize the last_meal_time of each philosopher with this start time
 	//(*thats why we dont initilize it in the init_philosophers)
 	while (i < shared.number_of_philosophers)
 	{
-		pthread_mutex_lock(&shared.last_meal_mutex);
 		shared.philosophers[i].last_meal_time = shared.start_time;
 		shared.philosophers[i].meals_eaten = 0;
 		i++;
-		pthread_mutex_unlock(&shared.last_meal_mutex);
 	}
 	i = 0;
+	printf("philonum->%d\n", shared.number_of_philosophers);
 	while (i < shared.number_of_philosophers)
 	{
 		//starting all philosopher threads
